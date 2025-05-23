@@ -130,6 +130,8 @@ This custom code is rather simple: whenever we are sending a string to the WB5MM
 
 Of note, I am merely sharing the source code I have directly modified after CubeMx has generated the files. If one follows Phil’s lead and modify everything as I have described here, the output should work.
 
+IMPORTANT!!! The "custom_stm.c" source code DOES NOT go into the the src folder of the code! It goes to "STM32_WPAN/App"! with all the other BLE-related files.
+
 I am also sharing the source code to run the OLED screen. Unfortunately, unlike previous disco screens - like the one on the F429ZI or the F412G - the screen on the WB5 is an OLED . This makes it not compatible with previous TFT screen drive philosophies (no convenient IO layer found to be loaded). It is also soldered/attached directly to the board so no alternative boards can be used to test the screen and then port a solution from there. In the end I took one from github (user "libdriver" https://github.com/libdriver/ssd1315) and tailored it to run on the WB5. Of note, the "libdriver" solution has practically no explanation given to it, nor does it indicate clearly where the different layers (main/IO/driver/peripheral, see FSMC or LTDC screen projects) should attach. I have added some explanation here and there, that should help.
 
 ## Conclusion
