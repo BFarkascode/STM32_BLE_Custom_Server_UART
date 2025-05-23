@@ -1,5 +1,14 @@
 /* USER CODE BEGIN Header */
 /**
+ *  Author: BalazsFarkas
+ *  Project: STM32_BLE_Custom_Server_UART
+ *  Processor: STM32WB5MMG
+ *  Compiler: ARM-GCC (STM32 IDE)
+ *  Program version: 1.0
+ *  File: main.c
+ *  Hardware description/pin distribution: N/A
+ *  Modified from: N/A
+ *  Change history: N/A
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
@@ -18,17 +27,8 @@
   ******************************************************************************
   ******************************************************************************
   *
-  * v1 Basic implementation of SSD1315 driver
-  *
-  * v2 Advanced implementation of SSD1315 driver
-  * 	Practical difference between basic and advanced is minimal
-  * 	Added BMP280 readout
-  * 	Send temperature measurement to screen
-  *
-  * v3 Added BLE
-  * 	Replaced blocking I2C functions and delay to not corrupt BLE
-  * 	BLE still refuses to play well with the I2C
-  * 	Removed I2C and generated only a simple UART pipe sent to the screen (for now)
+  * Simple UART pipe for BLE
+  * String is published to WB5 OLED screen
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
@@ -86,40 +86,6 @@ static void MX_RF_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//BMP280 temperature compensation calculation for fixed point results
-/*int32_t compensate_temperature(int32_t sensor_adc_readout, uint16_t dig_T1, int16_t dig_T2, int16_t dig_T3) {
-
-	int32_t var1, var2;
-
-	var1 = ((((sensor_adc_readout >> 3) - (dig_T1 << 1)))	* dig_T2) >> 11;
-	var2 = (((((sensor_adc_readout >> 4) - dig_T1) * ((sensor_adc_readout >> 4) - dig_T1)) >> 12) * dig_T3) >> 14;
-
-	return ((var1 + var2) * 5 + 128) >> 8;
-}
-
-int32_t temperature = 0;
-
-uint8_t scan_reply;																			//used for the scan loop
-
-enum_Yes_No_Selector scanning_bus;
-enum_Yes_No_Selector Tx_finished;
-enum_Yes_No_Selector Rx_finished;
-
-uint8_t Tx_number_of_bytes;
-uint8_t* bytes_to_send_ptr;
-uint8_t* bytes_received_ptr;
-
-uint8_t buf[1];
-
-//read BMP280 sensor
-const uint8_t T_adc[3] = {0xFA, 0xFB, 0xFC};											//this is where the ADC temp values will go
-static uint8_t T_out[3] = {0x0, 0x0, 0x0};
-
-//We rebuild the parameters from the readout
-//these values are coming from the T_comp readout, see I2C project. We bypass the readout since they are constant values anyway.
-const uint16_t dig_T1 = (0x6b << 8) | 0x36;
-const int16_t dig_T2 = (0x65 << 8) | 0x7d;
-const int16_t dig_T3 = (0x0 << 8) | 0x8c;*/
 
 /* USER CODE END 0 */
 
@@ -158,7 +124,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-//  MX_I2C1_Init();
   MX_SPI1_Init();
   MX_RTC_Init();
   MX_RF_Init();
@@ -253,25 +218,6 @@ int main(void)
   HAL_Delay(1000);
 
   res = ssd1315_advance_clear();
-/*
-   //we define the calibration message matrices
-//   uint8_t reset_sensor[2] = {0xE0, 0xB6};												//reset register and value for resetting for BMP280
-   uint8_t std_setup[2] = {0xF4, 0x27};													//we define a standard mode with no oversampling
-
-   //BMP280 init
-   //BMP280 I2C address is 0x77
- //  HAL_I2C_Master_Transmit(&hi2c1, (0x77 << 1), std_setup, 2,1000);
-
-   TIM2Config();
-   I2CConfig(0x20);
-   I2C1IRQPriorEnable();
-
-   //we set teh device address to 0x77
-   uint8_t device_addr = 0x77;
-
-    //BMP280 init
-    I2CTX(device_addr, 2, std_setup);													//standard mode, no oversampling
-    Delay_ms(200);*/
 
   /* USER CODE END 2 */
 
@@ -286,54 +232,6 @@ int main(void)
     MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
-
-	  //--------------------//
-
-/*	  //read BMP280 sensor
-	  uint8_t T_adc[3] = {0xFA, 0xFB, 0xFC};											//this is where the ADC temp values will go
-	  uint8_t T_out[3] = {0x0, 0x0, 0x0};
-
-	  //We rebuild the parameters from the readout
-	  //these values are coming from the T_comp readout, see I2C project. We bypass the readout since they are constant values anyway.
-	  uint16_t dig_T1 = (0x6b << 8) | 0x36;
-	  int16_t dig_T2 = (0x65 << 8) | 0x7d;
-	  int16_t dig_T3 = (0x0 << 8) | 0x8c;*/
-
-	  //BMP280 temperature ADC readout
-	  //we execute each readout separate to avoid the while loop block without the readout's code
-	  //also we store the readout values in a static variable since if the bus is busy, we skip the readout
-	  	  //this way we ensure that eventually we will have the right values captured eventually without delays use
-
-    /*            	I2CReadout(0x77, 1, &T_adc[0], &T_out[0]);
-                	I2CReadout(0x77, 1, &T_adc[1], &T_out[1]);
-                	I2CReadout(0x77, 1, &T_adc[2], &T_out[2]);
-
-                	int32_t adc_T = (T_out[0] << 12) | (T_out[1] << 4) | (T_out[2]>>4);				//we rebuild the 20 bit temperature value
-
-                	int32_t temperature = compensate_temperature(adc_T, dig_T1, dig_T2, dig_T3);*/
-
- /*               	I2CReadout(0x77, 1, &T_adc[0], &T_out[0]);
-                	I2CReadout(0x77, 1, &T_adc[1], &T_out[1]);
-                	I2CReadout(0x77, 1, &T_adc[2], &T_out[2]);
-
-                	int32_t adc_T = (T_out[0] << 12) | (T_out[1] << 4) | (T_out[2]>>4);				//we rebuild the 20 bit temperature value
-
-                	int32_t temperature = compensate_temperature(adc_T, dig_T1, dig_T2, dig_T3);
-
-          	  //--------------------//
-
-    			  //publish temperature value to screen
-
-    			  char str[10];
-
-    			  sprintf(str, "%u", temperature);
-
-    			  ssd1315_advance_string(0, 0, str, 10, 1, 0x10);*/
-
-	  //--------------------//
-	  //send temperature to BLE
-
-
   }
   /* USER CODE END 3 */
 }
