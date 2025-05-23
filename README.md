@@ -126,13 +126,13 @@ Our BLE client for this project will be just a smartphone, running the ST app ca
 Mind, there is another ST app called the "ST BLE Sensor" which provides some mor complicated interfacing options. It is also the one we need if we want to run some of the ST-provides example codes on the WB5.
 
 ## User guide
-This custom code is rather simple: whenever we are sending a string to the WB5MM, it will go and write it on the screen. The string length limit is 12 characters.
+This custom code is rather simple: whenever we are sending a string to the WB5MM, it will go and write it on the screen. The string length limit is 60 characters.
 
 Of note, I am merely sharing the source code I have directly modified after CubeMx has generated the files. If one follows Phil’s lead and modify everything as I have described here, the output should work.
 
 IMPORTANT!!! The "custom_stm.c" source code DOES NOT go into the the src folder of the code! It goes to "STM32_WPAN/App"! with all the other BLE-related files.
 
-I am also sharing the source code to run the OLED screen. Unfortunately, unlike previous disco screens - like the one on the F429ZI or the F412G - the screen on the WB5 is an OLED . This makes it not compatible with previous TFT screen drive philosophies (no convenient IO layer found to be loaded). It is also soldered/attached directly to the board so no alternative boards can be used to test the screen and then port a solution from there. In the end I took one from github (user "libdriver" https://github.com/libdriver/ssd1315) and tailored it to run on the WB5. Of note, the "libdriver" solution has practically no explanation given to it, nor does it indicate clearly where the different layers (main/IO/driver/peripheral, see FSMC or LTDC screen projects) should attach. I have added some explanation here and there, that should help.
+I am also sharing the source code to run the OLED screen. Unfortunately, unlike previous disco screens - like the one on the F429ZI or the F412G - the screen on the WB5 is an OLED . This makes it not compatible with previous TFT screen drive philosophies (no convenient IO layer found to be loaded). It is also soldered/attached directly to the board so no alternative boards can be used to test the screen and then port a solution from there. In the end I took one from github (user "libdriver" https://github.com/libdriver/ssd1315) and tailored it to run on the WB5. Of note, the "libdriver" solution has practically no explanation given to it, nor does it indicate clearly where the different layers (main/IO/driver/peripheral, see FSMC or LTDC screen projects) should attach. I have added some explanation here and there, that should help. The screen uses SPI1, driven by HAL, so set it up accordingly in CubeMx before compiling the code.
 
 ## Conclusion
 We have successfully set up a custom server that will react to an incoming data string by printing it our on its OLED screen.
