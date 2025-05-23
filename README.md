@@ -118,7 +118,7 @@ Please note that the names of the services and characteristics are purely indica
 
 Mind, since we are making a custom service with custom characteristics, we will not use any UUIDs and just leave it blank. We will work in this more in the second project.
 
-Here, we will be sending over 24 bytes all the time (12 ASCII characters), just for convenience’s sake: 12 characters will fit comfortably on the WB5’s LCD screen and is exactly the length of the string "Hello world!". We will need to set this value within our custom characteristic's properties. Please be aware that the "Event" mentioned above will only fire when this number of transfers have happened and the our custom characteristic is "filled". For me, sending more data packets and overflowing the characteristic lead to the stack crashing.
+Here, we will be sending over 32 bytes all the time (16 ASCII characters), just for convenience’s sake: 16 characters will fit comfortably on the WB5’s LCD screen. We will need to set this value within our custom characteristic's properties. Setting "variable" length will allow for the transfer to occur for any strings that are shorter than that as well. Please be aware that the "Event" mentioned above will only fire if the transfer complies and makes our characteristic is "filled". Sending more data packets than the maximum limit and overflowing the characteristic lead to the stack crashing for me.
 
 ### Setting up a client
 Our BLE client for this project will be just a smartphone, running the ST app called "ST BLE toolbox". I won't get into this, the app is pretty straight forwards and provides us a simple serial interface to play with.
