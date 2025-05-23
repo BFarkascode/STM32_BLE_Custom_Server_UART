@@ -67,13 +67,16 @@ An example for a GATT service is a custom “UART-type coms”, which would cons
 
 ## Previous relevant projects
 I am going through the related Phil’s Lab project and elaborate a bit on the documentation he is referring to: 
+
 [STM32 Bluetooth Firmware Tutorial (Bring-Up) - Phil's Lab #129](https://www.youtube.com/watch?v=-xYoI84zJew)
 
 ## To read
 I also suggest checking out the official tutorials, though Phil is definitely doing a better job at explaining them compared to the peeps at ST:
+
 [STM32WB OLT - 1. Introduction Welcome session](https://www.youtube.com/watch?v=OIVx817WGf0&list=PLnMKNibPkDnGkMxFkRArr9uOq_Es_a7vG&index=3)
 
 Lastly, I have found this video particularly useful understanding, how Bluetooth works in general:
+
 [How does Bluetooth Work?](https://www.youtube.com/watch?v=1I1vxu5qIUM)
 
 ## Particularities
@@ -127,7 +130,7 @@ This custom code is rather simple: whenever we are sending a string to the WB5MM
 
 Of note, I am merely sharing the source code I have directly modified after CubeMx has generated the files. If one follows Phil’s lead and modify everything as I have described here, the output should work.
 
-I am also sharing the source code to run the OLED screen. Unfortunately, unlike previous disco screens - like the one on the F429ZI or the F412G - the screen on the WB5 is an OLED . This makes it not compatible with previous TFT screen drive philosophies (no convenient IO layer found to be loaded). It is also soldered/attached directly to the board so no alternative boards can be used to test the screen and then port a solution from there. In the end I took one from github (user "libdriver") and tailored it to run on the WB5. Of note, the "libdriver" solution has practically no explanation given to it, nor does it indicate clearly where the different layers (main/IO/driver/peripheral, see FSMC or LTDC screen projects) should attach. I have added some explanation here and there, that should help.
+I am also sharing the source code to run the OLED screen. Unfortunately, unlike previous disco screens - like the one on the F429ZI or the F412G - the screen on the WB5 is an OLED . This makes it not compatible with previous TFT screen drive philosophies (no convenient IO layer found to be loaded). It is also soldered/attached directly to the board so no alternative boards can be used to test the screen and then port a solution from there. In the end I took one from github (user "libdriver" https://github.com/libdriver/ssd1315) and tailored it to run on the WB5. Of note, the "libdriver" solution has practically no explanation given to it, nor does it indicate clearly where the different layers (main/IO/driver/peripheral, see FSMC or LTDC screen projects) should attach. I have added some explanation here and there, that should help.
 
 ## Conclusion
 We have successfully set up a custom server that will react to an incoming data string by printing it our on its OLED screen.
