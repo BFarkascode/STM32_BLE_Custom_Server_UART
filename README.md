@@ -59,10 +59,11 @@ GAP (Generic Profile Access) is, technically speaking, what defines if a BLE-ena
 
 GATT (Generic Attribute) are a set of transactions that will build the communication protocol between our two devices. The server will be the peripheral, holding the all the GATT characteristic of the device and the client will be the central device (phone) which will regularly request information or activity from the peripheral. The client is expected to honour the timing (connection interval) and the communication demands of the server, albeit it can ignore them should the channel be deemed noisy or unavailable.  GATT has three different elements:
 
-•	A GATT profile is a high-level collection of services between the two devices. Profiles are pretty much applications and one can found a whole bunch of them as official profiles on the Bluetooth website. They are built up from services. We won't be really touching open these.
-•	GATT services are the “functions” within GATT. Each can have one or more characteristics. Services have their own ID which then helps two devices to recognise and synchronise their activities.
-•	GATT characteristics are the lowest level elements in GATT. They can be paralleled with variables (i.e., collecting of data points). They also have their own ID.
-An example for a GATT service is a custom “UART-type coms”, which would consist of a “TX” and an “RX” characteristic where TX would have write privileges and RX as read only.
+- A GATT profile is a high-level collection of services between the two devices. Profiles are pretty much applications and one can found a whole bunch of them as official profiles on the Bluetooth website. They are built up from services. We won't be really touching open these.
+- GATT services are the “functions” within GATT. Each can have one or more characteristics. Services have their own ID which then helps two devices to recognise and synchronise their activities.
+- GATT characteristics are the lowest level elements in GATT. They can be paralleled with variables (i.e., collecting of data points). They also have their own ID.
+
+An example for a GATT service is a custom “UART-type coms”, which would consist of a “TX” and an “RX” characteristic where TX would have write privileges and RX as read only. We will do only the Tx part here so as to stay with only one characteristic.
 
 ## Previous relevant projects
 I am going through the related Phil’s Lab project and elaborate a bit on the documentation he is referring to: 
